@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="theme-color"
+content="#111111">
+
+<title>Scarecrow | Control Panel</title>
+
+
+<style>
+
+:root {
+
+--bg:#111111;
+--card:#1a1a1a;
+--border:rgba(255,127,98,.3);
+--text:#fff;
+--muted:#aaa;
+--accent:#ff7f62;
+--input:#222;
+
+}
+
+
+body.light-mode {
+
+--bg:#f5f5f5;
+--card:#fff;
+--border:rgba(255,127,98,.4);
+--text:#111;
+--muted:#666;
+--input:#eee;
+
+}
+
+
+* {
+box-sizing:border-box;
+}
+
+
+body {
+
+margin:0;
+
+background:var(--bg);
+
+color:var(--text);
+
+font-family:Arial,sans-serif;
+
+border:6px solid var(--accent);
+
+min-height:100vh;
+
+}
+
+
+nav {
+
+position:sticky;
+
+top:0;
+
+background:var(--bg);
+
+z-index:2;
+
+padding:15px;
+
+border-bottom:1px solid var(--border);
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:12px;
+
+flex-wrap:wrap;
+
+}
+
+
+h1 {
+
+font-size:23px;
+
+color:var(--accent);
+
+margin:0;
+
+}
+
+
+h2 {
+
+font-size:19px;
+
+margin:0;
+
+}
+
+
+small,
+.muted {
+
+color:var(--muted);
+
+}
+
+
+nav a {
+
+color:var(--muted);
+
+text-decoration:none;
+
+font-size:12px;
+
+}
+
+
+main {
+
+max-width:950px;
+
+margin:24px auto;
+
+padding:0 14px;
+
+}
+
+
+.card {
+
+background:var(--card);
+
+border:1px solid var(--border);
+
+padding:20px;
+
+margin-bottom:18px;
+
+}
+
+
+.heading {
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+padding-bottom:14px;
+
+margin-bottom:16px;
+
+border-bottom:1px solid var(--border);
+
+}
+
+
+.grid {
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(130px,1fr));
+
+gap:12px;
+
+}
+
+
+.box {
+
+background:var(--input);
+
+border:1px solid var(--border);
+
+padding:18px 10px;
+
+text-align:center;
+
+}
+
+
+.box.active {
+
+border-color:var(--accent);
+
+}
+
+
+.label {
+
+display:block;
+
+font-size:11px;
+
+color:var(--muted);
+
+text-transform:uppercase;
+
+letter-spacing:1px;
+
+}
+
+
+.value {
+
+display:block;
+
+margin-top:10px;
+
+color:var(--accent);
+
+font-size:17px;
+
+font-weight:bold;
+
+overflow-wrap:anywhere;
+
+}
+
+
+.switch-row {
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:12px;
+
+margin-bottom:16px;
+
+}
+
+
+input,
+select,
+button {
+
+font:inherit;
+
+}
+
+
+select,
+input[type=text],
+input[type=password],
+input[type=time] {
+
+width:100%;
+
+padding:12px;
+
+margin-top:8px;
+
+background:var(--input);
+
+color:var(--text);
+
+border:1px solid var(--border);
+
+}
+
+
+input[type=range] {
+
+width:100%;
+
+accent-color:var(--accent);
+
+}
+
+
+input[type=checkbox] {
+
+accent-color:var(--accent);
+
+width:20px;
+
+height:20px;
+
+}
+
+
+.control {
+
+margin-bottom:17px;
+
+}
+
+
+button {
+
+background:var(--accent);
+
+color:#111;
+
+padding:13px;
+
+border:0;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+.primary {
+
+width:100%;
+
+}
+
+
+.track {
+
+height:10px;
+
+background:var(--input);
+
+border:1px solid var(--border);
+
+margin:10px 0 18px;
+
+}
+
+
+.fill {
+
+height:100%;
+
+width:0;
+
+background:var(--accent);
+
+}
+
+
+.bars {
+
+height:50px;
+
+display:flex;
+
+gap:4px;
+
+align-items:flex-end;
+
+margin:12px 0;
+
+border-bottom:1px solid var(--border);
+
+}
+
+
+.bar {
+
+flex:1;
+
+min-height:2px;
+
+background:var(--accent);
+
+opacity:.35;
+
+}
+
+
+.bar.high {
+
+opacity:1;
+
+}
+
+
+.schedule-status {
+
+padding:12px;
+
+background:var(--input);
+
+border:1px solid var(--border);
+
+margin-top:12px;
+
+font-weight:bold;
+
+color:var(--accent);
+
+}
+
+
+.time-grid {
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+}
+
+
+#toast {
+
+position:fixed;
+
+bottom:-80px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+background:var(--accent);
+
+color:#111;
+
+padding:12px 20px;
+
+font-weight:bold;
+
+transition:bottom .3s;
+
+z-index:5;
+
+}
+
+
+#toast.show {
+
+bottom:25px;
+
+}
+
+
+@media(max-width:500px) {
+
+body {
+
+border-width:3px;
+
+}
+
+.card {
+
+padding:14px;
+
+}
+
+.time-grid {
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+<div>
+
+<h1>SCARECROW</h1>
+
+<small>
+V5.0 | Edge Impulse Bird Detection
+</small>
+
+</div>
+
+
+<div style="display:flex;gap:10px;
+flex-wrap:wrap;align-items:center">
+
+<a href="#live">LIVE</a>
+
+<a href="#ai">AI</a>
+
+<a href="#audio">AUDIO</a>
+
+<a href="#schedule">SCHEDULE</a>
+
+<a href="#network">NETWORK</a>
+
+
+<select
+id="themeSelect"
+onchange="changeTheme()"
+style="width:auto;margin:0">
+
+<option value="dark">Dark</option>
+
+<option value="light">Light</option>
+
+</select>
+
+</div>
+
+</nav>
+
+
+<main>
+
+
+<!-- =====================================================
+     MASTER
+===================================================== -->
+
+<section class="card">
+
+
+<div class="switch-row">
+
+<div>
+
+<b>System Master Switch</b>
+
+<br>
+
+<small>
+Enable automatic playback
+</small>
+
+</div>
+
+
+<input
+type="checkbox"
+id="mainToggle"
+onchange="toggleState('system')">
+
+</div>
+
+
+<div class="switch-row">
+
+<div>
+
+<b>Edge Impulse AI</b>
+
+<br>
+
+<small>
+Local crow/raven sound classification
+</small>
+
+</div>
+
+
+<input
+type="checkbox"
+id="aiToggle"
+onchange="toggleState('ai')">
+
+</div>
+
+
+</section>
+
+
+<!-- =====================================================
+     LIVE
+===================================================== -->
+
+<section
+class="card"
+id="live">
+
+
+<div class="heading">
+
+<h2>Live Status</h2>
+
+<span>
+Triggers:
+<b id="val-count">0</b>
+</span>
+
+</div>
+
+
+<div class="grid">
+
+
+<div
+class="box"
+id="box-radar">
+
+<span class="label">
+Radar
+</span>
+
+<span
+class="value"
+id="val-radar">
+
+CLEAR
+
+</span>
+
+</div>
+
+
+<div
+class="box"
+id="box-pir">
+
+<span class="label">
+PIR Sensor
+</span>
+
+<span
+class="value"
+id="val-pir">
+
+CLEAR
+
+</span>
+
+</div>
+
+
+<div
+class="box"
+id="box-ai">
+
+<span class="label">
+Edge Impulse
+</span>
+
+<span
+class="value"
+id="val-ai">
+
+STARTING
+
+</span>
+
+</div>
+
+
+<div
+class="box"
+id="box-audio">
+
+<span class="label">
+Speaker
+</span>
+
+<span
+class="value"
+id="val-audio">
+
+IDLE
+
+</span>
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- =====================================================
+     AI
+===================================================== -->
+
+<section
+class="card"
+id="ai">
+
+
+<div class="heading">
+
+<h2>AI Prediction</h2>
+
+<span
+id="mp-status"
+class="muted">
+
+Starting
+
+</span>
+
+</div>
+
+
+<h2 id="mp-label">
+
+Waiting for audio
+
+</h2>
+
+
+<p
+id="mp-desc"
+class="muted">
+
+The trained model classifies microphone audio locally.
+
+</p>
+
+
+<div class="switch-row">
+
+<span>
+Live microphone volume
+</span>
+
+<b id="mp-vol">
+0
+</b>
+
+</div>
+
+
+<div class="track">
+
+<div
+class="fill"
+id="mp-vol-bar">
+</div>
+
+</div>
+
+
+<div class="switch-row">
+
+<span>
+Crow confidence
+</span>
+
+<b id="mp-conf">
+--%
+</b>
+
+</div>
+
+
+<div class="bars"
+id="conf-graph">
+</div>
+
+
+<small>
+
+AI trigger threshold:
+<b>95%</b>
+
+<br>
+
+Last prediction:
+<span id="mp-last">
+--:--:--
+</span>
+
+</small>
+
+
+</section>
+
+
+<!-- =====================================================
+     AUDIO
+===================================================== -->
+
+<section
+class="card"
+id="audio">
+
+
+<div class="heading">
+
+<h2>
+Audio Configuration
+</h2>
+
+</div>
+
+
+<div class="control">
+
+<label>
+SD Card Sound
+</label>
+
+
+<select
+id="soundChoice"
+onchange="saveSettings()">
+
+<option value="0">
+Random Sound (1-3)
+</option>
+
+<option value="1">
+Track 1 (0001.mp3)
+</option>
+
+<option value="2">
+Track 2 (0002.mp3)
+</option>
+
+<option value="3">
+Track 3 (0003.mp3)
+</option>
+
+</select>
+
+</div>
+
+
+<div class="control">
+
+<label>
+Play Duration per Repeat
+</label>
+
+
+<select
+id="duration"
+onchange="saveSettings()">
+
+<option value="5">
+5 Seconds
+</option>
+
+<option value="10">
+10 Seconds
+</option>
+
+<option value="15">
+15 Seconds
+</option>
+
+<option value="30">
+30 Seconds
+</option>
+
+<option value="60">
+60 Seconds
+</option>
+
+</select>
+
+</div>
+
+
+<div class="control">
+
+<label>
+Repeat Sound
+</label>
+
+
+<select
+id="repeatCount"
+onchange="saveSettings()">
+
+<option value="1">
+1 Time
+</option>
+
+<option value="2">
+2 Times
+</option>
+
+<option value="3">
+3 Times
+</option>
+
+<option value="4">
+4 Times
+</option>
+
+<option value="5">
+5 Times
+</option>
+
+<option value="10">
+10 Times
+</option>
+
+</select>
+
+</div>
+
+
+<div class="control">
+
+<label>
+
+Speaker Volume:
+
+<span id="volValue">
+25
+</span>
+
+/30
+
+</label>
+
+
+<input
+type="range"
+id="volume"
+min="0"
+max="30"
+value="25"
+oninput="
+document.getElementById('volValue')
+.textContent=this.value
+"
+onchange="saveSettings()">
+
+</div>
+
+
+<button
+class="primary"
+onclick="testSound()">
+
+TEST SOUND
+
+</button>
+
+
+</section>
+
+
+<!-- =====================================================
+     SCHEDULE
+===================================================== -->
+
+<section
+class="card"
+id="schedule">
+
+
+<div class="heading">
+
+<h2>
+Operating Schedule
+</h2>
+
+<span
+id="scheduleStatus"
+class="muted">
+
+DISABLED
+
+</span>
+
+</div>
+
+
+<div class="switch-row">
+
+<div>
+
+<b>
+Enable Schedule
+</b>
+
+<br>
+
+<small>
+Use real router/NTP time to control when automatic triggering is allowed.
+</small>
+
+</div>
+
+
+<input
+type="checkbox"
+id="scheduleToggle"
+onchange="saveSchedule()">
+
+</div>
+
+
+<div class="time-grid">
+
+
+<div class="control">
+
+<label>
+Start Time
+</label>
+
+<input
+type="time"
+id="scheduleStart"
+value="06:00"
+onchange="saveSchedule()">
+
+</div>
+
+
+<div class="control">
+
+<label>
+End Time
+</label>
+
+<input
+type="time"
+id="scheduleEnd"
+value="18:00"
+onchange="saveSchedule()">
+
+</div>
+
+
+</div>
+
+
+<div class="schedule-status">
+
+Current Time:
+<span id="scheduleClock">
+--:--:--
+</span>
+
+<br>
+
+Schedule:
+<span id="scheduleStatusText">
+DISABLED
+</span>
+
+</div>
+
+
+<p class="muted">
+
+Example:
+06:00 → 18:00 means the Scarecrow
+automatically operates only during those hours.
+
+<br><br>
+
+If Start Time and End Time are identical,
+the schedule operates 24 hours.
+
+<br><br>
+
+Overnight schedules are also supported.
+Example: 18:00 → 06:00.
+
+</p>
+
+
+</section>
+
+
+<!-- =====================================================
+     NETWORK
+===================================================== -->
+
+<section
+class="card"
+id="network">
+
+
+<div class="heading">
+
+<h2>
+Network Setup
+</h2>
+
+</div>
+
+
+<div class="control">
+
+<label>
+Wi-Fi Name (SSID)
+</label>
+
+
+<input
+type="text"
+id="ssid"
+placeholder="Router Wi-Fi name">
+
+</div>
+
+
+<div class="control">
+
+<label>
+Wi-Fi Password
+</label>
+
+
+<input
+type="password"
+id="password"
+placeholder="Wi-Fi password">
+
+</div>
+
+
+<button
+class="primary"
+onclick="saveWiFi()">
+
+SAVE NETWORK
+
+</button>
+
+
+<p class="muted">
+
+Dashboard Access Point:
+192.168.4.1
+
+</p>
+
+
+<p class="muted">
+
+Wi-Fi Status:
+<span id="wifiStatus">
+NOT CONNECTED
+</span>
+
+</p>
+
+
+<p class="muted">
+
+Current Real Time:
+<span id="clock">
+--:--:--
+</span>
+
+</p>
+
+
+</section>
+
+
+</main>
+
+
+<div id="toast">
+Saved
+</div>
+
+
+<script>
+
+
+// =====================================================
+// THEME
+// =====================================================
+
+function changeTheme() {
+
+const t =
+document.getElementById(
+'themeSelect'
+).value;
+
+
+document.body.classList.toggle(
+'light-mode',
+t === 'light'
+);
+
+
+try {
+
+localStorage.setItem(
+'scarecrow-theme',
+t
+);
+
+} catch(e) {}
+
+}
+
+
+// =====================================================
+// TOAST
+// =====================================================
+
+function showToast(m) {
+
+const t =
+document.getElementById(
+'toast'
+);
+
+t.textContent = m;
+
+t.classList.add(
+'show'
+);
+
+
+setTimeout(
+() => t.classList.remove('show'),
+2200
+);
+
+}
+
+
+// =====================================================
+// SENSOR DISPLAY
+// =====================================================
+
+function updateSensor(
+id,
+active,
+waiting
+) {
+
+const b =
+document.getElementById(
+'box-' + id
+);
+
+
+const v =
+document.getElementById(
+'val-' + id
+);
+
+
+b.classList.remove(
+'active'
+);
+
+
+if(active) {
+
+b.classList.add(
+'active'
+);
+
+v.textContent =
+'DETECTED';
+
+}
+
+else if(waiting) {
+
+v.textContent =
+'WAITING';
+
+}
+
+else {
+
+v.textContent =
+'CLEAR';
+
+}
+
+}
+
+
+// =====================================================
+// REFRESH
+// =====================================================
+
+let dataLoaded = false;
+
+
+async function refreshData() {
+
+try {
+
+const r =
+await fetch(
+'/api/state',
+{
+cache:'no-store'
+}
+);
+
+
+if(!r.ok) return;
+
+
+const d =
+await r.json();
+
+
+document.getElementById(
+'mainToggle'
+).checked =
+d.enabled;
+
+
+document.getElementById(
+'aiToggle'
+).checked =
+d.aiEnabled;
+
+
+document.getElementById(
+'scheduleToggle'
+).checked =
+d.scheduleEnabled;
+
+
+document.getElementById(
+'val-count'
+).textContent =
+d.count;
+
+
+updateSensor(
+'radar',
+d.radarInstant,
+d.radarWindow
+);
+
+
+updateSensor(
+'pir',
+d.pirInstant,
+d.pirWindow
+);
+
+
+// -------------------------
+// AI
+// -------------------------
+
+document.getElementById(
+'val-ai'
+).textContent =
+d.aiStatus;
+
+
+document.getElementById(
+'mp-status'
+).textContent =
+d.aiStatus;
+
+
+document.getElementById(
+'mp-last'
+).textContent =
+d.aiLast;
+
+
+document.getElementById(
+'mp-label'
+).textContent =
+
+d.aiLabel === 'CROW'
+?
+'CROW / RAVEN DETECTED'
+:
+d.aiLabel === 'NO CROW'
+?
+'NO CROW DETECTED'
+:
+d.aiStatus;
+
+
+document.getElementById(
+'mp-desc'
+).textContent =
+
+d.aiStatus ===
+'AI DISABLED'
+
+?
+
+'AI classification is disabled.'
+
+:
+
+'Classification is running locally using your trained Edge Impulse model.';
+
+
+const vol =
+Number(d.micVolume) || 0;
+
+
+document.getElementById(
+'mp-vol'
+).textContent =
+vol;
+
+
+document.getElementById(
+'mp-vol-bar'
+).style.width =
+Math.min(
+vol / 1500 * 100,
+100
+) + '%';
+
+
+document.getElementById(
+'mp-conf'
+).textContent =
+d.aiConf >= 0
+?
+d.aiConf + '%'
+:
+'--%';
+
+
+const g =
+document.getElementById(
+'conf-graph'
+);
+
+
+g.innerHTML = '';
+
+
+(d.confHistory || [])
+.forEach(v => {
+
+const bar =
+document.createElement(
+'div'
+);
+
+
+bar.className =
+'bar' +
+(v >= 95 ? ' high' : '');
+
+
+bar.style.height =
+Math.max(2,v) + '%';
+
+
+g.appendChild(bar);
+
+});
+
+
+document.getElementById(
+'box-ai'
+).classList.toggle(
+'active',
+d.aiLabel === 'CROW'
+);
+
+
+// -------------------------
+// AUDIO
+// -------------------------
+
+const a =
+document.getElementById(
+'box-audio'
+);
+
+
+if(d.playing) {
+
+a.classList.add(
+'active'
+);
+
+
+document.getElementById(
+'val-audio'
+).textContent =
+
+'PLAYING (' +
+d.currentPlayCount +
+'/' +
+d.repeatCount +
+')';
+
+}
+
+else {
+
+a.classList.remove(
+'active'
+);
+
+
+document.getElementById(
+'val-audio'
+).textContent =
+d.dfReady
+?
+'READY'
+:
+'ERROR';
+
+}
+
+
+// -------------------------
+// TIME
+// -------------------------
+
+document.getElementById(
+'clock'
+).textContent =
+d.time;
+
+
+document.getElementById(
+'scheduleClock'
+).textContent =
+d.time;
+
+
+document.getElementById(
+'scheduleStatus'
+).textContent =
+d.scheduleStatus;
+
+
+document.getElementById(
+'scheduleStatusText'
+).textContent =
+d.scheduleStatus;
+
+
+document.getElementById(
+'wifiStatus'
+).textContent =
+d.wifiConnected
+?
+'CONNECTED'
+:
+'NOT CONNECTED';
+
+
+// -------------------------
+// SCHEDULE INPUTS
+// -------------------------
+
+if(!dataLoaded) {
+
+document.getElementById(
+'volume'
+).value =
+d.volume;
+
+
+document.getElementById(
+'volValue'
+).textContent =
+d.volume;
+
+
+document.getElementById(
+'soundChoice'
+).value =
+d.soundChoice;
+
+
+document.getElementById(
+'duration'
+).value =
+d.duration;
+
+
+document.getElementById(
+'repeatCount'
+).value =
+d.repeatCount;
+
+
+document.getElementById(
+'ssid'
+).value =
+d.savedSSID || '';
+
+
+document.getElementById(
+'scheduleStart'
+).value =
+d.scheduleStart;
+
+
+document.getElementById(
+'scheduleEnd'
+).value =
+d.scheduleEnd;
+
+
+dataLoaded = true;
+
+}
+
+
+} catch(e) {}
+
+}
+
+
+// =====================================================
+// TOGGLE
+// =====================================================
+
+async function toggleState(type) {
+
+const el =
+document.getElementById(
+type === 'system'
+?
+'mainToggle'
+:
+'aiToggle'
+);
+
+
+try {
+
+await fetch(
+'/api/toggle?type=' +
+type +
+'&state=' +
+el.checked
+);
+
+
+showToast(
+'State updated'
+);
+
+
+refreshData();
+
+} catch(e) {
+
+showToast(
+'Request failed'
+);
+
+}
+
+}
+
+
+// =====================================================
+// AUDIO SETTINGS
+// =====================================================
+
+async function saveSettings() {
+
+const p =
+new URLSearchParams({
+
+soundChoice:
+document.getElementById(
+'soundChoice'
+).value,
+
+duration:
+document.getElementById(
+'duration'
+).value,
+
+repeatCount:
+document.getElementById(
+'repeatCount'
+).value,
+
+volume:
+document.getElementById(
+'volume'
+).value
+
+});
+
+
+try {
+
+await fetch(
+'/api/settings?' +
+p
+);
+
+
+showToast(
+'Settings saved'
+);
+
+} catch(e) {
+
+showToast(
+'Save failed'
+);
+
+}
+
+}
+
+
+// =====================================================
+// TEST SOUND
+// =====================================================
+
+async function testSound() {
+
+try {
+
+const r =
+await fetch(
+'/api/test_sound'
+);
+
+
+showToast(
+await r.text()
+);
+
+
+refreshData();
+
+} catch(e) {
+
+showToast(
+'Request failed'
+);
+
+}
+
+}
+
+
+// =====================================================
+// SCHEDULE SAVE
+// =====================================================
+
+async function saveSchedule() {
+
+const enabled =
+document.getElementById(
+'scheduleToggle'
+).checked;
+
+
+const start =
+document.getElementById(
+'scheduleStart'
+).value;
+
+
+const end =
+document.getElementById(
+'scheduleEnd'
+).value;
+
+
+if(!start || !end) {
+
+showToast(
+'Select start and end time'
+);
+
+return;
+
+}
+
+
+try {
+
+await fetch(
+'/api/schedule?' +
+new URLSearchParams({
+
+enabled:
+enabled,
+
+start:
+start,
+
+end:
+end
+
+})
+);
+
+
+showToast(
+'Schedule saved'
+);
+
+
+refreshData();
+
+} catch(e) {
+
+showToast(
+'Schedule save failed'
+);
+
+}
+
+}
+
+
+// =====================================================
+// WIFI
+// =====================================================
+
+async function saveWiFi() {
+
+const ssid =
+document.getElementById(
+'ssid'
+).value.trim();
+
+
+const password =
+document.getElementById(
+'password'
+).value;
+
+
+if(!ssid) {
+
+showToast(
+'SSID required'
+);
+
+return;
+
+}
+
+
+try {
+
+await fetch(
+'/api/wifi?' +
+new URLSearchParams({
+
+ssid,
+password
+
+})
+);
+
+
+document.getElementById(
+'password'
+).value = '';
+
+
+showToast(
+'Connecting to Wi-Fi'
+);
+
+
+} catch(e) {
+
+showToast(
+'Connection request failed'
+);
+
+}
+
+}
+
+
+// =====================================================
+// THEME LOAD
+// =====================================================
+
+try {
+
+document.getElementById(
+'themeSelect'
+).value =
+localStorage.getItem(
+'scarecrow-theme'
+) || 'dark';
+
+} catch(e) {}
+
+
+changeTheme();
+
+
+// =====================================================
+// START REFRESH
+// =====================================================
+
+setInterval(
+refreshData,
+500
+);
+
+
+refreshData();
+
+</script>
+
+</body>
+
+</html>
